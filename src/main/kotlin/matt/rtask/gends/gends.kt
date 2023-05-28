@@ -20,6 +20,7 @@ import matt.model.email.MY_MIT_EMAIL
 import matt.rtask.briar.BriarTrainingFolder
 import matt.rtask.briar.BriarVideo
 import matt.service.frames.MFrameGrabber
+import matt.time.dur.YesIUseTime
 import matt.time.dur.sleep
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
@@ -122,6 +123,7 @@ fun <R> forEachVideo(op: (BriarVideo, MediaAnnotation) -> R): List<R> {
     thread(isDaemon = true) {
         while (true) {
             println("Memory: Max=${RUNTIME.maxMemory()}\tFree=${RUNTIME.freeMemory()}\tTotal=${RUNTIME.totalMemory()}")
+            YesIUseTime
             sleep(5.seconds)
         }
     }
