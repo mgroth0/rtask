@@ -1,0 +1,50 @@
+{
+  "type": "BasicJvmOnlyMod",
+  "publishToOM": true,
+  "usesRTaskInputs": true,
+  "jvmExec": {
+    "type": "Typical"
+  },
+  "dependencies": [
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:file"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:json"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:shell"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:rtask:rinput"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:log:profile"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:briar"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:ffmpeg"
+    },
+    {
+      "type": "Lib",
+      "cfg": "implementation",
+      "key": "xmlutil-serialization"
+    }
+  ]
+}

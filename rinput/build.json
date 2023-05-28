@@ -1,0 +1,11 @@
+{
+  "type": "BasicJvmOnlyMod",
+  "publicBytecode": true,
+  "dependencies": [
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:json"
+    }
+  ]
+}
