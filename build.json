@@ -19,27 +19,22 @@
     {
       "type": "Project",
       "cfg": "implementation",
-      "path": ":k:shell"
-    },
-    {
-      "type": "Project",
-      "cfg": "implementation",
       "path": ":k:rtask:rinput"
     },
     {
       "type": "Project",
       "cfg": "implementation",
-      "path": ":k:log:profile"
+      "path": ":k:time"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:service"
     },
     {
       "type": "Project",
       "cfg": "implementation",
       "path": ":k:briar"
-    },
-    {
-      "type": "Project",
-      "cfg": "implementation",
-      "path": ":k:ffmpeg"
     },
     {
       "type": "Lib",

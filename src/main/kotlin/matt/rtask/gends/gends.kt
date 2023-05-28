@@ -26,8 +26,6 @@ import kotlin.concurrent.thread
 import kotlin.time.Duration.Companion.seconds
 
 
-
-
 val BriarVideo.extractFolder
     get() =
         vidFile
@@ -88,7 +86,7 @@ fun generateDatasetJsons(frameExtractor: MFrameGrabber? = null) {
 
     println("copying metadata file")
     OM2_TEMP.mkdirs()
-    mainMetadataFile.copyTo(OM2_TEMP[mainMetadataFile.name],overwrite = true)
+    mainMetadataFile.copyTo(OM2_TEMP[mainMetadataFile.name], overwrite = true)
 
     println("writing readme")
     readmeFile.text = """
@@ -112,7 +110,11 @@ fun <R> forEachVideo(op: (BriarVideo, MediaAnnotation) -> R): List<R> {
 
     val pool = Executors.newFixedThreadPool(
         RUNTIME.availableProcessors()
-    ) { Thread(it).also { it.isDaemon = true } }
+    ) {
+        Thread(it).also {
+            it.isDaemon = true
+        }
+    }
 
     thread(isDaemon = true) {
         while (true) {
