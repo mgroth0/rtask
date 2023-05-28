@@ -13,6 +13,7 @@ import matt.file.commons.rcommons.BRIAR_EXTRACT_FOLDER
 import matt.file.commons.rcommons.BRIAR_EXTRACT_METADATA_FOLDER
 import matt.file.commons.rcommons.OpenMindFiles.OM2_TEMP
 import matt.file.construct.mFile
+import matt.json.YesIUseJson
 import matt.json.toJsonString
 import matt.lang.RUNTIME
 import matt.model.email.MY_MIT_EMAIL
@@ -58,6 +59,8 @@ fun generateDatasetJsons(frameExtractor: MFrameGrabber? = null) {
             subject = metadata.subject.id,
             frames = framesToExtract
         )
+
+        YesIUseJson
         extractedVidMetadataFile.text = extractedMetadata.toJsonString()
 
         AllVidMetadata(

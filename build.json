@@ -12,9 +12,9 @@
       "path": ":k:file"
     },
     {
-      "type": "Lib",
-      "cfg": "api",
-      "key": "kotlinx-serialization-json"
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:json"
     },
     {
       "type": "Project",
