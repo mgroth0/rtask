@@ -13,7 +13,6 @@ import matt.file.commons.rcommons.BRIAR_EXTRACT_FOLDER
 import matt.file.commons.rcommons.BRIAR_EXTRACT_METADATA_FOLDER
 import matt.file.commons.rcommons.OpenMindFiles.OM2_TEMP
 import matt.file.construct.mFile
-import matt.json.YesIUseJson
 import matt.json.toJsonString
 import matt.lang.RUNTIME
 import matt.model.email.MY_MIT_EMAIL
@@ -39,7 +38,6 @@ fun generateDatasetJsons(frameExtractor: MFrameGrabber? = null) {
 
     val readmeFile = BRIAR_EXTRACT_FOLDER["README.txt"]
     val mainMetadataFile = BRIAR_EXTRACT_METADATA_FOLDER
-//    val allMetadataFile = briarExtractFolder["all_metadata.json"]
 
     val videoMetadataFiles = forEachVideo { vid, metadata ->
 
@@ -61,7 +59,6 @@ fun generateDatasetJsons(frameExtractor: MFrameGrabber? = null) {
             frames = framesToExtract
         )
 
-        YesIUseJson
         extractedVidMetadataFile.text = extractedMetadata.toJsonString()
 
         AllVidMetadata(
@@ -79,15 +76,6 @@ fun generateDatasetJsons(frameExtractor: MFrameGrabber? = null) {
     println("writing metadata file 1")
     mainMetadataFile.write(ExtractedMetaData(videoMetadataFiles.map { it.file }).toJsonString())
     println("writing metadata file 2")
-//    println("compiling metadata")
-//    val compiled = AllExtractedMetaData(videoMetadataFiles)
-//    val outputStream = allMetadataFile.outputStream()
-//    println("got stream. encoding to stream...")
-//    Json.encodeToStream(compiled,outputStream)
-//    println("closing stream")
-//    outputStream.close()
-//    println("closed stream")
-
     println("copying metadata file")
     OM2_TEMP.mkdirs()
     mainMetadataFile.copyTo(OM2_TEMP[mainMetadataFile.name], overwrite = true)

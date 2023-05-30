@@ -14,7 +14,7 @@ sealed interface RInput {
 object QuickCheck : RInput
 
 @Serializable
-object PrepareDatasetJsons : RInput
+object ExtractBriarMetadataInputs : RInput
 
 
 @Serializable
