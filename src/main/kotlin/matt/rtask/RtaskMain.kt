@@ -4,6 +4,7 @@ import kotlinx.serialization.json.Json
 import matt.lang.RUNTIME
 import matt.rtask.checksbatch.checkSBatch
 import matt.rtask.gends.generateDatasetJsons
+import matt.rtask.quick.quickCheck
 import matt.rtask.rinput.CheckSBatchOutputInput
 import matt.rtask.rinput.ExtractBriarMetadataInputs
 import matt.rtask.rinput.QuickCheck
@@ -25,7 +26,7 @@ fun main(args: Array<String>) {
     val arg = args.singleOrNull() ?: error("there should be one and only one arg")
     val rArg = Json.decodeFromString<RInput>(arg)
     when (rArg) {
-        QuickCheck                 -> println("all systems online!")
+        QuickCheck                 -> quickCheck()
         ExtractBriarMetadataInputs -> generateDatasetJsons()
         CheckSBatchOutputInput     -> checkSBatch()
     }

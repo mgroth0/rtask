@@ -13,11 +13,13 @@ import matt.file.commons.rcommons.BRIAR_EXTRACT_FOLDER
 import matt.file.commons.rcommons.BRIAR_EXTRACT_METADATA_FOLDER
 import matt.file.commons.rcommons.OpenMindFiles.OM2_TEMP
 import matt.file.construct.mFile
+import matt.json.YesIUseJson
 import matt.json.toJsonString
 import matt.lang.RUNTIME
 import matt.model.email.MY_MIT_EMAIL
 import matt.rtask.briar.BriarTrainingFolder
 import matt.rtask.briar.BriarVideo
+import matt.rtask.profile.openMindProfile
 import matt.service.frames.MFrameGrabber
 import matt.time.dur.YesIUseTime
 import matt.time.dur.sleep
@@ -34,7 +36,7 @@ val BriarVideo.extractFolder
             .let { BRIAR_EXTRACT_DATA_FOLDER[it] }
             .let { it.resolveSibling(it.name.substringBefore(".")) }
 
-fun generateDatasetJsons(frameExtractor: MFrameGrabber? = null) {
+fun generateDatasetJsons(frameExtractor: MFrameGrabber? = null) = openMindProfile {
 
     val readmeFile = BRIAR_EXTRACT_FOLDER["README.txt"]
     val mainMetadataFile = BRIAR_EXTRACT_METADATA_FOLDER
@@ -166,6 +168,7 @@ fun MediaAnnotation.framesToExtract(): List<FrameAnnotation> {
 fun FrameAnnotation.extractedFrameMetadata() = ExtractedFrameMetaData(
     index = frameIndex,
     body = bodyAnnotation.let {
+        YesIUseJson
         BoundingBox(
             x = it.boundingBox.boundingBoxCoordinates.leftTopCoordinates.x,
             y = it.boundingBox.boundingBoxCoordinates.leftTopCoordinates.y,

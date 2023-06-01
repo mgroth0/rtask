@@ -40,6 +40,11 @@
       "type": "Lib",
       "cfg": "implementation",
       "key": "xmlutil-serialization"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:log:profile:jp"
     }
   ]
 }
