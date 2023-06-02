@@ -9,11 +9,6 @@
     {
       "type": "Project",
       "cfg": "implementation",
-      "path": ":k:file"
-    },
-    {
-      "type": "Project",
-      "cfg": "implementation",
       "path": ":k:json"
     },
     {
@@ -24,7 +19,12 @@
     {
       "type": "Project",
       "cfg": "implementation",
-      "path": ":k:time"
+      "path": ":k:async:thread"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:ffmpeg"
     },
     {
       "type": "Project",

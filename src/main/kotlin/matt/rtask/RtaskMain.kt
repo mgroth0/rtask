@@ -1,9 +1,9 @@
 package matt.rtask
 
 import kotlinx.serialization.json.Json
-import matt.lang.RUNTIME
-import matt.rtask.checksbatch.checkSBatch
-import matt.rtask.gends.generateDatasetJsons
+import matt.lang.NUM_LOGICAL_CORES
+import matt.rtask.iarpa.checksbatch.checkSBatch
+import matt.rtask.iarpa.gends.generateDatasetJsons
 import matt.rtask.quick.quickCheck
 import matt.rtask.rinput.CheckSBatchOutputInput
 import matt.rtask.rinput.ExtractBriarMetadataInputs
@@ -15,7 +15,7 @@ import matt.rtask.toc.mimicBashToc
 fun main(args: Array<String>) {
 
     println(
-        "numCPUs=${RUNTIME.availableProcessors()}"
+        "numCPUs=$NUM_LOGICAL_CORES"
     )
 
 

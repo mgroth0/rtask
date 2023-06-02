@@ -1,10 +1,11 @@
-package matt.rtask.briar
+package matt.rtask.iarpa.briar
 
+import kotlinx.serialization.decodeFromString
 import matt.briar.meta.MediaAnnotation
 import matt.briar.meta.SubjectID
-import kotlinx.serialization.decodeFromString
 import matt.file.MFile
 import matt.file.commons.rcommons.OM_LOCAL_DATA_FOLDER
+import matt.json.YesIUseJson
 import nl.adaptivity.xmlutil.serialization.XML
 
 
@@ -15,6 +16,9 @@ object BriarTrainingFolder {
             BriarSubjectFolder(it)
         }
     }
+    val fieldDistanceFolders get() = subjectFolders.asSequence().flatMap { it.field.distanceFolders }
+    val boundingConditionsFolders get() = fieldDistanceFolders.flatMap { it.boundingConditions }
+    val videos get() = boundingConditionsFolders.flatMap { it.videos }
 }
 
 class BriarSubjectFolder(private val folder: MFile) {
@@ -84,3 +88,5 @@ class BriarMetadataFile(val file: MFile) {
     val isDetections = file.endsWith(DETECTIONS_FILE_SUFFIX)
 }
 
+
+val yes = YesIUseJson

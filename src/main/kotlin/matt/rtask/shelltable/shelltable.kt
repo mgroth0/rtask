@@ -1,58 +1,7 @@
-package matt.rtask.checksbatch
+package matt.rtask.shelltable
 
-import matt.file.commons.rcommons.OpenMindFiles.SBATCH_OUTPUT_FOLDER
 import matt.model.code.idea.TabularDataIdea
 import matt.prim.str.filterNotBlank
-
-
-fun checkSBatch() {
-    println("check sbatch placeholder")
-    SBATCH_OUTPUT_FOLDER
-    /*    val rawSqueueOutput = ShellOutputTable(shell("/usr/bin/squeue", "-u", "mjgroth"))*/
-
-    val outFiles = SBATCH_OUTPUT_FOLDER.listFiles()!!.filter { it.mExtension.afterDot == "out" }
-
-    /*
-
-        val currentRunningJobIds = rawSqueueOutput.filter {
-            it["ST"] != "PD"
-        }.onEach {
-            require(it["ST"] == "R")
-        }.map {
-            it["JOBID"]
-        }
-    */
-
-
-    println("outFiles count = ${outFiles.size}")
-    /*    println("currentRunningJobs count = ${currentRunningJobIds.size}")
-
-        val outFilesToCheck = outFiles.filter {
-            it.nameWithoutExtension !in currentRunningJobIds
-        }*/
-    val outFilesToCheck = outFiles
-
-    println("outFilesToCheck count = ${outFilesToCheck.size}")
-
-    val lastLines = outFilesToCheck.map {
-        it to it.text.lines().filterNotBlank().last().trim()
-    }
-
-    /*temp debug*/
-    lastLines.forEach {
-        if ("n=9" !in it.second) {
-            println("problem? ${it.first}")
-        }
-    }
-
-    println("pivot?")
-    lastLines.groupBy { it.second }.forEach { (line, instances) ->
-        println("\t${line}\t${instances.size}")
-    }
-
-
-}
-
 
 class ShellOutputTable(raw: String) : TabularDataIdea, List<Map<String, String>> {
 

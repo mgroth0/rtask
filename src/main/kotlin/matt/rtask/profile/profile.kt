@@ -2,12 +2,14 @@ package matt.rtask.profile
 
 import matt.file.commons.rcommons.OM_LATEST_JP_SNAPSHOT
 import matt.file.commons.rcommons.OM_SNAPSHOT_FOLDER
+import matt.lang.IsProfiling
 import matt.lang.function.Op
 import matt.log.profile.jp.JProfiler
 import matt.log.profile.real.Profiler
 
 inline fun openMindProfile(op: Op) {
     val profiler = Profiler(
+        enableAll = IsProfiling,
         engine = JProfiler(snapshotFolder = OM_SNAPSHOT_FOLDER)
     ) {
         println("saved snapshot: $it")
