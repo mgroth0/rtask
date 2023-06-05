@@ -4,16 +4,16 @@ import kotlinx.serialization.decodeFromString
 import matt.briar.meta.MediaAnnotation
 import matt.briar.meta.SubjectID
 import matt.file.MFile
-import matt.file.commons.rcommons.OM_LOCAL_DATA_FOLDER
+import matt.file.context.ComputeContext
 import matt.json.YesIUseJson
 import nl.adaptivity.xmlutil.serialization.XML
 
 
-object BriarTrainingFolder {
-    val folder = OM_LOCAL_DATA_FOLDER["BRS1"]
+class BriarTrainingFolder(context: ComputeContext) {
+    val folder = context.files.briarDataFolder["BRS1"]
     val subjectFolders by lazy {
         folder.listFilesAsList()!!.map {
-            BriarSubjectFolder(it)
+            BriarSubjectFolder(this, it)
         }
     }
     val fieldDistanceFolders get() = subjectFolders.asSequence().flatMap { it.field.distanceFolders }
@@ -21,9 +21,12 @@ object BriarTrainingFolder {
     val videos get() = boundingConditionsFolders.flatMap { it.videos }
 }
 
-class BriarSubjectFolder(private val folder: MFile) {
+class BriarSubjectFolder(
+    trainingFolder: BriarTrainingFolder,
+    private val folder: MFile
+) {
     val controlled = BriarControlledData(folder["controlled"])
-    val field = BriarFieldData(folder["field"])
+    val field = BriarFieldData(trainingFolder, folder["field"])
     val subjectID get() = SubjectID(folder.name)
 }
 
@@ -33,13 +36,16 @@ enum class BriarDistances {
     `100m`, `200m`, `400m`, `500m`, close_range, uav
 }
 
-class BriarFieldData(private val folder: MFile) {
+class BriarFieldData(
+    trainingFolder: BriarTrainingFolder,
+    private val folder: MFile
+) {
     val distanceFolders = BriarDistances.values().map {
         folder[it.name]
     }.filter {
         it.exists()
     }.map {
-        BriarDistanceData(it)
+        BriarDistanceData(trainingFolder, it)
     }
 }
 
@@ -47,28 +53,40 @@ enum class BoundingCondition {
     wb, face
 }
 
-class BriarDistanceData(private val folder: MFile) {
+class BriarDistanceData(
+    trainingFolder: BriarTrainingFolder,
+    private val folder: MFile
+) {
     val boundingConditions = BoundingCondition.values().map {
         folder[it.name]
     }.filter {
         it.exists()
     }.map {
-        BriarWholeBodyOrFaceData(it)
+        BriarWholeBodyOrFaceData(trainingFolder, it)
     }
 }
 
-class BriarWholeBodyOrFaceData(private val folder: MFile) {
+class BriarWholeBodyOrFaceData(
+    trainingFolder: BriarTrainingFolder,
+    private val folder: MFile
+) {
     val videos by lazy {
         val children = folder.listFilesAsList() ?: error("could not get children of $folder")
         children.filter { it.mExtension.afterDot == "mp4" }.map {
-            BriarVideo(it)
+            BriarVideo(trainingFolder, it)
         }
     }
 }
 
 private const val DETECTIONS_FILE_SUFFIX = "_WB_face_detections.xml"
 
-class BriarVideo(val vidFile: MFile) {
+class BriarVideo(
+    trainingFolder: BriarTrainingFolder,
+    val vidFile: MFile
+) {
+    val relativeVidFile by lazy {
+        vidFile.relativeTo(trainingFolder.folder)
+    }
     val metadataFile by lazy {
         val tracksFile = vidFile.resolveSibling(vidFile.name.substringBefore(".") + "_WB_face_tracks.xml")
         val detectionsFile = vidFile.resolveSibling(vidFile.name.substringBefore(".") + DETECTIONS_FILE_SUFFIX)

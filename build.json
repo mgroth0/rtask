@@ -19,17 +19,17 @@
     {
       "type": "Project",
       "cfg": "implementation",
+      "path": ":k:rtask:tabular"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
       "path": ":k:async:thread"
     },
     {
       "type": "Project",
       "cfg": "implementation",
       "path": ":k:ffmpeg"
-    },
-    {
-      "type": "Project",
-      "cfg": "implementation",
-      "path": ":k:service"
     },
     {
       "type": "Project",
@@ -45,6 +45,11 @@
       "type": "Project",
       "cfg": "implementation",
       "path": ":k:log:profile:jp"
+    },
+    {
+      "type": "Lib",
+      "cfg": "implementation",
+      "key": "guava"
     }
   ]
 }

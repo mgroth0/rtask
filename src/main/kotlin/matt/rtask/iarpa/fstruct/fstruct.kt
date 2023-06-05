@@ -1,11 +1,12 @@
 package matt.rtask.iarpa.fstruct
 
-import matt.file.commons.rcommons.BRIAR_EXTRACT_DATA_FOLDER
-import matt.rtask.iarpa.briar.BriarTrainingFolder
+import matt.file.context.ComputeContext
 import matt.rtask.iarpa.briar.BriarVideo
 
+context(ComputeContext)
 val BriarVideo.extractFolder
-    get() = vidFile
-        .relativeTo(BriarTrainingFolder.folder)
-        .let { BRIAR_EXTRACT_DATA_FOLDER[it] }
+    get() = relativeVidFile
+        .let {
+            files.briarExtractDataFolder[it]
+        }
         .let { it.resolveSibling(it.name.substringBefore(".")) }

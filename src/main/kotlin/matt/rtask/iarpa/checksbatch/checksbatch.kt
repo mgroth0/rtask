@@ -1,13 +1,12 @@
 package matt.rtask.iarpa.checksbatch
 
-import matt.file.commons.rcommons.OpenMindFiles.SBATCH_OUTPUT_FOLDER
 import matt.prim.str.filterNotBlank
+import matt.rtask.rinput.CheckSBatchOutputInput
 
 
-fun checkSBatch() {
+fun checkSBatch(rArg: CheckSBatchOutputInput) {
     println("check sbatch placeholder")
-    SBATCH_OUTPUT_FOLDER
-    val outFiles = SBATCH_OUTPUT_FOLDER.listFiles()!!.filter { it.mExtension.afterDot == "out" }
+    val outFiles = rArg.computeContext.files.sbatchOutputFolder.listFiles()!!.filter { it.mExtension.afterDot == "out" }
     println("outFiles count = ${outFiles.size}")
     println("outFilesToCheck count = ${outFiles.size}")
     val lastLines = outFiles.map {

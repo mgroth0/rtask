@@ -1,21 +1,38 @@
 package matt.rtask.rinput
 
 import kotlinx.serialization.Serializable
+import matt.file.context.ComputeContext
 import matt.json.YesIUseJson
 import matt.json.toJsonString
+import matt.model.data.message.SFile
 
 @Serializable
 sealed interface RInput {
+    val computeContext: ComputeContext
     private val yes get() = YesIUseJson
     fun serializeAsRinput() = toJsonString<RInput>()
 }
 
 @Serializable
-object QuickCheck : RInput
+class QuickCheck(override val computeContext: ComputeContext) : RInput
 
 @Serializable
-object ExtractBriarMetadataInputs : RInput
-
+class ExtractBriarMetadataInputs(override val computeContext: ComputeContext) : RInput
 
 @Serializable
-object CheckSBatchOutputInput : RInput
+sealed interface RInputWithOutput : RInput {
+    val remoteOutputFolder: SFile
+}
+
+@Serializable
+class PrepareBriarCrops(override val computeContext: ComputeContext) : RInput
+
+@Serializable
+class SummarizeBriarMetadataInputs(
+    override val computeContext: ComputeContext,
+    override val remoteOutputFolder: SFile,
+    val localOutputFolder: SFile
+) : RInputWithOutput
+
+@Serializable
+class CheckSBatchOutputInput(override val computeContext: ComputeContext) : RInput

@@ -6,6 +6,11 @@
       "type": "Project",
       "cfg": "implementation",
       "path": ":k:json"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:file"
     }
   ]
 }
