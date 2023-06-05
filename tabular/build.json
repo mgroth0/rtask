@@ -10,21 +10,6 @@
       "type": "Project",
       "cfg": "implementation",
       "path": ":k:collect"
-    },
-    {
-      "type": "Project",
-      "cfg": "api",
-      "path": ":k:html:fig"
-    },
-    {
-      "type": "Lib",
-      "cfg": "api",
-      "key": "kt-reflect"
-    },
-    {
-      "type": "Project",
-      "cfg": "api",
-      "path": ":k:reflect"
     }
   ]
 }

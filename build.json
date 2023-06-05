@@ -24,6 +24,11 @@
     {
       "type": "Project",
       "cfg": "implementation",
+      "path": ":k:html:fig"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
       "path": ":k:async:thread"
     },
     {
