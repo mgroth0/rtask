@@ -7,6 +7,8 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
 
+class CroppedFrame(val index: Int, val crop: Box)
+
 fun ExtractedFrameMetaData.generateCrop(
     totalWidth: Int,
     totalHeight: Int

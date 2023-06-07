@@ -10,7 +10,7 @@ import nl.adaptivity.xmlutil.serialization.XML
 
 
 class BriarTrainingFolder(context: ComputeContext) {
-    val folder = context.files.briarDataFolder["BRS1"]
+    val folder = context.files.brs1Folder
     val subjectFolders by lazy {
         folder.listFilesAsList()!!.map {
             BriarSubjectFolder(this, it)
@@ -82,7 +82,7 @@ private const val DETECTIONS_FILE_SUFFIX = "_WB_face_detections.xml"
 
 class BriarVideo(
     trainingFolder: BriarTrainingFolder,
-    val vidFile: MFile
+    private val vidFile: MFile
 ) {
     val relativeVidFile by lazy {
         vidFile.relativeTo(trainingFolder.folder)
