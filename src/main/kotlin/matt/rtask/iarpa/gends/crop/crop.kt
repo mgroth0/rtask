@@ -33,6 +33,7 @@ import matt.rtask.iarpa.gends.crop.crop.generateCrop
 import matt.rtask.iarpa.gends.crop.png.PngSizePredictor
 import matt.rtask.rinput.PrepareBriarCrops
 import matt.shell.CommandReturner
+import matt.shell.DEFAULT_LINUX_PROGRAM_PATH_CONTEXT
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration.Companion.seconds
@@ -87,7 +88,7 @@ fun prepareBriarCrops(rArg: PrepareBriarCrops) {
             }.code
             mogScript.text = lineDelimitedString {
                 crops.forEach {
-                    +CommandReturner.mogrify.run(
+                    +CommandReturner(DEFAULT_LINUX_PROGRAM_PATH_CONTEXT).mogrify.run(
                         options = ImageMagickOptions(crop = "${it.crop.width}x${it.crop.height}+0+0"),
                         file = framesFolder[it.index.toString() + ".png"]
                     ).rawWithNoEscaping()
