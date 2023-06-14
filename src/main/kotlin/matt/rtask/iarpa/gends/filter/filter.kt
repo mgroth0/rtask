@@ -30,6 +30,7 @@ import matt.rtask.iarpa.briar.BriarTrainingFolder
 import matt.rtask.iarpa.briar.BriarVideo
 import matt.rtask.iarpa.fstruct.extractMetadataFile
 import matt.rtask.iarpa.fstruct.trackCacheFile
+import matt.rtask.iarpa.gends.filter.cleanorientations.markOrientationWithNoConfidence
 import matt.rtask.iarpa.gends.filter.simmat.loadSimMat
 import matt.rtask.iarpa.gends.filter.stimselect.StimuliSelectionContextImpl
 import matt.rtask.iarpa.gends.readme.briarExtractReadme
@@ -234,7 +235,12 @@ class VideoExtraction(
     val trackMetadata by lazy {
         with(extractionProcess.extraction) {
             video.trackCacheFile.loadOrSaveCbor<List<ExtractedFrameMetaData>> {
-                fullMetadata.detailedAnnotation.completeAnnotation.track.frameAnnotations.map(FrameAnnotation::extractedFrameMetadata)
+                val originalFrames = fullMetadata.detailedAnnotation.completeAnnotation.track.frameAnnotations
+                val extractedFrames = originalFrames.map(FrameAnnotation::extractedFrameMetadata)
+                extractedFrames.markOrientationWithNoConfidence(
+                    fps = eitherMetadata.mediaInfo.videoFrameRate_fps
+                )
+                extractedFrames
             }
         }
     }

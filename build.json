@@ -59,6 +59,11 @@
     {
       "type": "Project",
       "cfg": "implementation",
+      "path": ":k:math"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
       "path": ":k:imagemagick"
     },
     {
