@@ -12,7 +12,7 @@ class CroppedFrame(val index: Int, val crop: Box)
 fun ExtractedFrameMetaData.generateCrop(
     totalWidth: Int,
     totalHeight: Int
-): Box {
+): Box = requireHasBothBoundingBoxes().run {
     val faceXEnd = face.x + face.width
     val faceYEnd = face.y + face.height
     val bodyXEnd = body.x + body.width

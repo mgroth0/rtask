@@ -1,6 +1,7 @@
 package matt.rtask.rinput
 
 import kotlinx.serialization.Serializable
+import matt.briar.BriarExtraction
 import matt.file.context.ComputeContext
 import matt.json.YesIUseJson
 import matt.json.toJsonString
@@ -17,7 +18,7 @@ sealed interface RInput {
 class QuickCheck(override val computeContext: ComputeContext) : RInput
 
 @Serializable
-class ExtractBriarMetadataInputs(override val computeContext: ComputeContext) : RInput
+class ExtractBriarMetadataInputs(override val computeContext: ComputeContext, val extraction: BriarExtraction) : RInput
 
 @Serializable
 sealed interface RInputWithOutput : RInput {
@@ -25,13 +26,14 @@ sealed interface RInputWithOutput : RInput {
 }
 
 @Serializable
-class PrepareBriarCrops(override val computeContext: ComputeContext) : RInput
+class PrepareBriarCrops(override val computeContext: ComputeContext, val extraction: BriarExtraction) : RInput
 
 @Serializable
 class SummarizeBriarMetadataInputs(
     override val computeContext: ComputeContext,
     override val remoteOutputFolder: SFile,
-    val localOutputFolder: SFile
+    val localOutputFolder: SFile,
+    val extraction: BriarExtraction
 ) : RInputWithOutput
 
 @Serializable

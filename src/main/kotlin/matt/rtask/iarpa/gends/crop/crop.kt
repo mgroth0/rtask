@@ -19,6 +19,7 @@ import matt.ffmpeg.filtergraph.sendcmd.sendcmdFile
 import matt.ffmpeg.filtergraph.setpts.setPts
 import matt.file.CaseSensitivity.CaseSensitive
 import matt.file.construct.mFile
+import matt.file.context.OpenMindComputeContext
 import matt.file.ext.FileExtension
 import matt.imagemagick.ImageMagickOptions
 import matt.imagemagick.mogrify
@@ -34,6 +35,7 @@ import matt.rtask.iarpa.gends.crop.png.PngSizePredictor
 import matt.rtask.rinput.PrepareBriarCrops
 import matt.shell.CommandReturner
 import matt.shell.DEFAULT_LINUX_PROGRAM_PATH_CONTEXT
+import matt.shell.DEFAULT_MAC_PROGRAM_PATH_CONTEXT
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration.Companion.seconds
@@ -41,15 +43,15 @@ import kotlin.time.Duration.Companion.seconds
 
 fun prepareBriarCrops(rArg: PrepareBriarCrops) {
     val extractedVidsCounter = CountPrinter(printEvery = 100) { "finished preparing filtergraph of vid $it..." }
-    val metadata = rArg.computeContext.files.briarExtractMetadataFile.loadJson<ExtractedMetaData>()
+    val metadata = rArg.extraction.briarExtractMetadataFile.loadJson<ExtractedMetaData>()
     val totalBytesEstimate = AtomicLong()
     val imageCount = AtomicInteger()
     val pngSizePredictor = PngSizePredictor()
     withFailableDaemonPool {
-        metadata.videos.parMap { vid ->
+        metadata.videos.filter { it.framesMetaDataFile != null }.parMap { vid ->
             checkIfInterrupted()
             extractedVidsCounter.click()
-            val framesFile = mFile(vid.framesMetaDataFile)
+            val framesFile = mFile(vid.framesMetaDataFile!!)
             val framesMetadata = framesFile.loadJson<ExtractedFramesMetaData>()
             val totalRes = vid.metadata.mediaInfo.resolution
             val totalWidth = totalRes.width
@@ -88,7 +90,12 @@ fun prepareBriarCrops(rArg: PrepareBriarCrops) {
             }.code
             mogScript.text = lineDelimitedString {
                 crops.forEach {
-                    +CommandReturner(DEFAULT_LINUX_PROGRAM_PATH_CONTEXT).mogrify.run(
+                    +CommandReturner(
+                        when (rArg.computeContext) {
+                            is OpenMindComputeContext -> DEFAULT_LINUX_PROGRAM_PATH_CONTEXT
+                            else                      -> DEFAULT_MAC_PROGRAM_PATH_CONTEXT
+                        }
+                    ).mogrify.run(
                         options = ImageMagickOptions(crop = "${it.crop.width}x${it.crop.height}+0+0"),
                         file = framesFolder[it.index.toString() + ".png"]
                     ).rawWithNoEscaping()

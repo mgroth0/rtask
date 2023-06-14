@@ -9,6 +9,8 @@ class TabularVideo2(it: MediaAnnotation) : TabularClass2 {
     val camera = it.sensorInfo.id
     val cameraType = it.sensorInfo.type
     val cameraModel = it.sensorInfo.model
+    val sensorElevation = it.sensorToSubjectInfo.sensorElevation ?: 0.0
+    val sensorYaw = it.sensorToSubjectInfo.sensorYawAngle
     val focalLength = it.sensorInfo.focalLength
     val sex = it.subject.subjectPersistentInfo.sex
     val raceLabel = it.subject.subjectPersistentInfo.race.label

@@ -22,6 +22,16 @@
       "path": ":k:rtask:tabular"
     },
     {
+      "type": "Lib",
+      "cfg": "implementation",
+      "key": "pickle"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:cbor"
+    },
+    {
       "type": "Project",
       "cfg": "implementation",
       "path": ":k:html:fig"

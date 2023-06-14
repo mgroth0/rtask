@@ -5,7 +5,7 @@ import matt.lang.NUM_LOGICAL_CORES
 import matt.prim.str.elementsToString
 import matt.rtask.iarpa.checksbatch.checkSBatch
 import matt.rtask.iarpa.gends.crop.prepareBriarCrops
-import matt.rtask.iarpa.gends.generateDatasetJsons
+import matt.rtask.iarpa.gends.filter.extractAndFilterMetadata
 import matt.rtask.iarpa.gends.summarize.summarizeBriarMetadata
 import matt.rtask.profile.openMindProfile
 import matt.rtask.quick.quickCheck
@@ -42,7 +42,7 @@ fun main(args: Array<String>) {
         openMindProfile {
             when (rArg) {
                 is QuickCheck                   -> quickCheck()
-                is ExtractBriarMetadataInputs   -> generateDatasetJsons(rArg)
+                is ExtractBriarMetadataInputs   -> extractAndFilterMetadata(rArg)
                 is PrepareBriarCrops            -> prepareBriarCrops(rArg)
                 is SummarizeBriarMetadataInputs -> summarizeBriarMetadata(rArg)
                 is CheckSBatchOutputInput       -> checkSBatch(rArg)

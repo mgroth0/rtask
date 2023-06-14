@@ -1,11 +1,11 @@
 package matt.rtask.iarpa.briar
 
-import kotlinx.serialization.decodeFromString
 import matt.briar.meta.MediaAnnotation
 import matt.briar.meta.SubjectID
 import matt.file.MFile
 import matt.file.context.ComputeContext
 import matt.json.YesIUseJson
+import nl.adaptivity.xmlutil.XmlStreaming
 import nl.adaptivity.xmlutil.serialization.XML
 
 
@@ -16,9 +16,9 @@ class BriarTrainingFolder(context: ComputeContext) {
             BriarSubjectFolder(this, it)
         }
     }
-    val fieldDistanceFolders get() = subjectFolders.asSequence().flatMap { it.field.distanceFolders }
-    val boundingConditionsFolders get() = fieldDistanceFolders.flatMap { it.boundingConditions }
-    val videos get() = boundingConditionsFolders.flatMap { it.videos }
+    val fieldDistanceFoldersSeq get() = subjectFolders.asSequence().flatMap { it.field.distanceFolders }
+    val boundingConditionsFoldersSeq get() = fieldDistanceFoldersSeq.flatMap { it.boundingConditions }
+    val videosSeq get() = boundingConditionsFoldersSeq.flatMap { it.videos }
 }
 
 class BriarSubjectFolder(
@@ -82,7 +82,7 @@ private const val DETECTIONS_FILE_SUFFIX = "_WB_face_detections.xml"
 
 class BriarVideo(
     trainingFolder: BriarTrainingFolder,
-    private val vidFile: MFile
+    private val vidFile: MFile,
 ) {
     val relativeVidFile by lazy {
         vidFile.relativeTo(trainingFolder.folder)
@@ -101,7 +101,8 @@ class BriarMetadataFile(val file: MFile) {
         }
     }
 
-    fun read() = BRIAR_XML.decodeFromString<MediaAnnotation>(file.text)
+    fun read() =
+        BRIAR_XML.decodeFromReader<MediaAnnotation>(XmlStreaming.newGenericReader(file.inputStream().bufferedReader()))
 
     val isDetections = file.endsWith(DETECTIONS_FILE_SUFFIX)
 }

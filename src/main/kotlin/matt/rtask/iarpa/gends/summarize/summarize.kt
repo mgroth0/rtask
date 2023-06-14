@@ -7,16 +7,17 @@ import matt.briar.meta.SubjectID
 import matt.briar.meta.extract.ExtractedFramesMetaData
 import matt.briar.meta.extract.ExtractedMetaData
 import matt.briar.meta.extract.ProcessedFrameMetadata
+import matt.briar.orientation.OrientationBinner
+import matt.briar.orientation.OrientationBinner.PITCH_RADIUS
+import matt.briar.orientation.OrientationBinner.YAW_RADIUS
 import matt.file.construct.mFile
+import matt.file.toMFile
 import matt.html.fig.report.htmlReport
 import matt.json.prim.loadJson
 import matt.log.CountPrinter
 import matt.prim.str.mybuild.lineDelimitedString
 import matt.prim.str.takeIfNotBlank
 import matt.rtask.iarpa.gends.summarize.check.check
-import matt.rtask.iarpa.gends.tabular.OrientationBinner
-import matt.rtask.iarpa.gends.tabular.OrientationBinner.PITCH_RADIUS
-import matt.rtask.iarpa.gends.tabular.OrientationBinner.YAW_RADIUS
 import matt.rtask.iarpa.gends.tabular.tabulartwo.TabularVideo2
 import matt.rtask.rinput.SummarizeBriarMetadataInputs
 import matt.rtask.tabular.count.counts
@@ -33,17 +34,16 @@ import kotlin.time.DurationUnit.MINUTES
 fun summarizeBriarMetadata(input: SummarizeBriarMetadataInputs) {
     val extractedVidsCounter = CountPrinter(printEvery = 1000) { "finished processing vid $it..." }
     val metadata = input
-        .computeContext
-        .files
+        .extraction
         .briarExtractMetadataFile
         .loadJson<ExtractedMetaData>()
     val videoTable = LinkedList<TabularVideo2>()
     val framesMonitor = object {}
     var frameTable: Iterable<ProcessedFrameMetadata> = LinkedList<ProcessedFrameMetadata>()
     withFailableDaemonPool {
-        metadata.videos.parMap { vid ->
+        metadata.videos.filter { it.framesMetaDataFile != null }.parMap { vid ->
             extractedVidsCounter.click()
-            val framesMetadata = mFile(vid.framesMetaDataFile).loadJson<ExtractedFramesMetaData>()
+            val framesMetadata = mFile(vid.framesMetaDataFile!!).loadJson<ExtractedFramesMetaData>()
             synchronized(videoTable) {
                 videoTable += TabularVideo2(vid.metadata)
             }
@@ -51,8 +51,8 @@ fun summarizeBriarMetadata(input: SummarizeBriarMetadataInputs) {
             val processedFrames = framesMetadata.frames.map {
                 ProcessedFrameMetadata(
                     OrientationBinner.bin(
-                        yaw = it.faceOrientation.yaw,
-                        pitch = it.faceOrientation.pitch
+                        yaw = it.faceOrientation!!.yaw,
+                        pitch = it.faceOrientation!!.pitch
                     ),
                     vid = vidMetadata
                 )
@@ -75,6 +75,7 @@ fun summarizeBriarMetadata(input: SummarizeBriarMetadataInputs) {
             p2: KProperty1<TabularVideo2, P2>
         ): String = videoTable.pivot(p1, p2).formatForConsole(formatter = HIDE_ZEROS)
         +piv(TabularVideo2::cameraModel, dist)
+        +piv(TabularVideo2::cameraModel, TabularVideo2::sensorElevation)
         +piv(TabularVideo2::clothingSet, dist)
         +piv(TabularVideo2::subject, dist)
         +piv(TabularVideo2::activity, dist)
@@ -114,15 +115,17 @@ fun summarizeBriarMetadata(input: SummarizeBriarMetadataInputs) {
     }
 
 
-    val outputFolder = mFile(input.remoteOutputFolder.path)
-    if (outputFolder.exists()) {
-        outputFolder.listFilesAsList()?.forEach {
+    val rootOutputFolder = input.remoteOutputFolder.toMFile()
+    rootOutputFolder.deleteIfExists()
+    val extractOutputFolder = rootOutputFolder[input.extraction.extractName]
+    /*if (extractOutputFolder.exists()) {
+        extractOutputFolder.listFilesAsList()?.forEach {
             it.deleteIfExists()
         }
-    }
+    }*/
 
 
-    outputFolder["summary.html"].text = htmlReport {
+    extractOutputFolder["summary.html"].text = htmlReport {
         pre(videoTable.stats(TabularVideo2::duration) { it.toDouble(MINUTES) }.formatForConsole())
         pre(videoTable.stats(TabularVideo2::totalFrames) { it.toDouble() }.formatForConsole())
         pre(videoTable.stats(TabularVideo2::cn2) { it?.raw?.takeIfNotBlank()?.toDouble() }.formatForConsole())
@@ -131,7 +134,7 @@ fun summarizeBriarMetadata(input: SummarizeBriarMetadataInputs) {
     }
 
 
-    outputFolder["subjects.csv"].text =
+    extractOutputFolder["subjects.csv"].text =
         videoTable.associateBy { it.subject }.entries.toTable<Map.Entry<SubjectID, TabularVideo2>, SubjectID, String, Any>(
             name = "subjects",
             rowHeaders = { it.key }
@@ -144,7 +147,7 @@ fun summarizeBriarMetadata(input: SummarizeBriarMetadataInputs) {
             }
         }.toCsv()
 
-    outputFolder["videos.csv"].text = videoTable.withIndex().toTable<IndexedValue<TabularVideo2>, Int, String, Any>(
+    extractOutputFolder["videos.csv"].text = videoTable.withIndex().toTable<IndexedValue<TabularVideo2>, Int, String, Any>(
         name = "videos",
         rowHeaders = { it.index }
     ) {
