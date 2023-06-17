@@ -80,6 +80,16 @@
       "type": "Lib",
       "cfg": "implementation",
       "key": "guava"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:omnigui:rmi"
+    },
+    {
+      "type": "Project",
+      "cfg": "implementation",
+      "path": ":k:socket"
     }
   ]
 }

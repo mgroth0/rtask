@@ -1,6 +1,7 @@
 package matt.rtask
 
 import kotlinx.serialization.json.Json
+import matt.cbor.YesIUseCbor
 import matt.lang.NUM_LOGICAL_CORES
 import matt.prim.str.elementsToString
 import matt.rtask.iarpa.checksbatch.checkSBatch
@@ -19,6 +20,8 @@ import matt.rtask.toc.mimicBashToc
 
 
 fun main(args: Array<String>) {
+
+    YesIUseCbor
 
     println(
         "numCPUs=$NUM_LOGICAL_CORES"

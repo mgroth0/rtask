@@ -5,20 +5,39 @@ import matt.briar.meta.SubjectID
 import matt.file.MFile
 import matt.file.context.ComputeContext
 import matt.json.YesIUseJson
+import matt.json.prim.saveload.loadOrSaveNonBlankString
+import matt.prim.str.joinWithNewLines
+import matt.prim.str.nonBlankLines
 import nl.adaptivity.xmlutil.XmlStreaming
 import nl.adaptivity.xmlutil.serialization.XML
 
 
 class BriarTrainingFolder(context: ComputeContext) {
     val folder = context.files.brs1Folder
-    val subjectFolders by lazy {
+
+    private val subjectFolders by lazy {
         folder.listFilesAsList()!!.map {
             BriarSubjectFolder(this, it)
         }
     }
-    val fieldDistanceFoldersSeq get() = subjectFolders.asSequence().flatMap { it.field.distanceFolders }
-    val boundingConditionsFoldersSeq get() = fieldDistanceFoldersSeq.flatMap { it.boundingConditions }
-    val videosSeq get() = boundingConditionsFoldersSeq.flatMap { it.videos }
+    private val fieldDistanceFoldersSeq get() = subjectFolders.asSequence().flatMap { it.field.distanceFolders }
+    private val boundingConditionsFoldersSeq get() = fieldDistanceFoldersSeq.flatMap { it.boundingConditions }
+
+    val cacheFile by lazy {
+        context.files.cacheFolder["BriarTrainingFolder"]["vid_list.txt"]
+    }
+
+    val videos by lazy {
+        cacheFile.loadOrSaveNonBlankString {
+            boundingConditionsFoldersSeq.flatMap { it.videos }.toList().joinWithNewLines { it.relativeVidFile.path }
+        }.nonBlankLines().map {
+            BriarVideo(
+                trainingFolder = this,
+                vidFile = folder[it]
+            )
+        }
+
+    }
 }
 
 class BriarSubjectFolder(
