@@ -54,11 +54,6 @@
     {
       "type": "Project",
       "cfg": "implementation",
-      "path": ":k:shell"
-    },
-    {
-      "type": "Project",
-      "cfg": "implementation",
       "path": ":k:math"
     },
     {
@@ -85,11 +80,6 @@
       "type": "Project",
       "cfg": "implementation",
       "path": ":k:omnigui:rmi"
-    },
-    {
-      "type": "Project",
-      "cfg": "implementation",
-      "path": ":k:socket"
     }
   ]
 }
