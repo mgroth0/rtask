@@ -15,7 +15,6 @@ import matt.briar.meta.ClothingSet.set1
 import matt.briar.meta.ClothingSet.set2
 import matt.briar.meta.FrameAnnotation
 import matt.briar.meta.SubjectID
-import matt.briar.meta.extract.BinnedOrientation
 import matt.briar.meta.extract.ExtractedFrameMetaData
 import matt.briar.meta.extract.ExtractedFramesMetaData
 import matt.briar.meta.extract.ExtractedMetaData
@@ -30,6 +29,7 @@ import matt.lang.function.Op
 import matt.lang.go
 import matt.log.CountPrinter
 import matt.model.data.message.SFile
+import matt.model.data.orientation.BinnedOrientation
 import matt.prim.str.joinWithNewLines
 import matt.rtask.iarpa.briar.BriarTrainingFolder
 import matt.rtask.iarpa.briar.BriarVideo

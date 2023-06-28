@@ -1,11 +1,11 @@
 package matt.rtask.iarpa.gends.filter.cleanorientations
 
-import matt.briar.meta.extract.BinnedOrientation
 import matt.briar.meta.extract.ExtractedFrameMetaData
 import matt.collect.list.slide.SlidingWindow
 import matt.collect.list.slide.slide
 import matt.math.reduce.mean
 import matt.math.reduce.standardDeviation
+import matt.model.data.orientation.BinnedOrientation
 import kotlin.math.abs
 import kotlin.math.floor
 
