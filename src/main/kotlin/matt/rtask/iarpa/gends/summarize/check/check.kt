@@ -4,6 +4,7 @@ import matt.briar.meta.MediaAnnotation
 import matt.briar.meta.Modality.face
 import matt.briar.meta.SensorType.specialized
 import matt.lang.go
+import matt.lang.require.requireEquals
 import matt.prim.str.takeIfNotBlank
 
 
@@ -20,7 +21,7 @@ fun MediaAnnotation.check() {
             error("got an unusual venue description: $it")
         }
     if (modality == face) {
-        require(sensorInfo.type == specialized) {
+        requireEquals(sensorInfo.type, specialized) {
             "I thought all face modality videos were from \"specialized\" cameras..."
         }
     }

@@ -1,5 +1,6 @@
 package matt.rtask.shelltable
 
+import matt.lang.require.requireEquals
 import matt.model.code.idea.TabularDataIdea
 import matt.prim.str.filterNotBlank
 
@@ -19,7 +20,7 @@ class ShellOutputTable(raw: String) : TabularDataIdea, List<Map<String, String>>
     override fun get(index: Int): Map<String, String> {
         val line = dataLines[index]
         val lineData = line.split("\t").filterNotBlank()
-        require(lineData.size == fieldNames.size)
+        requireEquals(lineData.size, fieldNames.size)
         return fieldNames.zip(lineData).toMap()
     }
 
@@ -58,7 +59,10 @@ class ShellOutputTable(raw: String) : TabularDataIdea, List<Map<String, String>>
         TODO("Not yet implemented")
     }
 
-    override fun subList(fromIndex: Int, toIndex: Int): List<Map<String, String>> {
+    override fun subList(
+        fromIndex: Int,
+        toIndex: Int
+    ): List<Map<String, String>> {
         TODO("Not yet implemented")
     }
 }

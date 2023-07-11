@@ -27,6 +27,7 @@ import matt.json.prim.loadJson
 import matt.json.toJsonString
 import matt.lang.function.Op
 import matt.lang.go
+import matt.lang.require.requireEquals
 import matt.log.CountPrinter
 import matt.model.data.message.SFile
 import matt.model.data.orientation.BinnedOrientation
@@ -86,7 +87,10 @@ fun extractAndFilterMetadata(rArg: ExtractBriarMetadataInputs) {
         class ClothingAssignments() {
             private val queryClothingSets = mutableMapOf<SubjectID, ClothingSet>()
             private var temporaryQueryClothingSet: Pair<SubjectID, ClothingSet>? = null
-            fun canUseSeqAsQuery(subjectID: SubjectID, set: ClothingSet): Boolean {
+            fun canUseSeqAsQuery(
+                subjectID: SubjectID,
+                set: ClothingSet
+            ): Boolean {
                 return if (subjectID !in queryClothingSets) true
                 else {
                     val qSet = queryClothingSets[subjectID]
@@ -94,7 +98,10 @@ fun extractAndFilterMetadata(rArg: ExtractBriarMetadataInputs) {
                 }
             }
 
-            fun canUseSeqAsGallery(subjectID: SubjectID, set: ClothingSet): Boolean {
+            fun canUseSeqAsGallery(
+                subjectID: SubjectID,
+                set: ClothingSet
+            ): Boolean {
                 temporaryQueryClothingSet?.go {
                     if (it.first == subjectID) {
                         return it.second != set
@@ -107,11 +114,17 @@ fun extractAndFilterMetadata(rArg: ExtractBriarMetadataInputs) {
                 }
             }
 
-            fun assignQuerySet(subjectID: SubjectID, set: ClothingSet) {
+            fun assignQuerySet(
+                subjectID: SubjectID,
+                set: ClothingSet
+            ) {
                 queryClothingSets[subjectID] = set
             }
 
-            fun assignTemporaryQuerySet(subjectID: SubjectID, set: ClothingSet) {
+            fun assignTemporaryQuerySet(
+                subjectID: SubjectID,
+                set: ClothingSet
+            ) {
                 temporaryQueryClothingSet = subjectID to set
             }
 
@@ -119,7 +132,10 @@ fun extractAndFilterMetadata(rArg: ExtractBriarMetadataInputs) {
                 temporaryQueryClothingSet = null
             }
 
-            fun assignGallerySet(subjectID: SubjectID, set: ClothingSet) {
+            fun assignGallerySet(
+                subjectID: SubjectID,
+                set: ClothingSet
+            ) {
                 queryClothingSets[subjectID] = when (set) {
                     set1 -> set2
                     set2 -> set1
@@ -283,7 +299,10 @@ fun extractAndFilterMetadata(rArg: ExtractBriarMetadataInputs) {
     readmeFile.text = briarExtractReadme()
 }
 
-class FoundFrame(val video: VideoExtraction, val frame: ExtractedFrameMetaData) {
+class FoundFrame(
+    val video: VideoExtraction,
+    val frame: ExtractedFrameMetaData
+) {
     fun path() = SFile(video.video.relativeVidFile.path.substringBefore(".") + "/" + frame.index + ".png")
 }
 
@@ -294,7 +313,7 @@ class BuiltTrial(
     val distractors: List<FoundFrame>
 ) {
     init {
-        require(distractors.size == 4)
+        requireEquals(distractors.size, 4)
     }
 
     fun toSTrial() = STrial(
