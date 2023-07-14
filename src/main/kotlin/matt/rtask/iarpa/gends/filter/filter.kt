@@ -44,7 +44,7 @@ import matt.rtask.iarpa.gends.readme.briarExtractReadme
 import matt.rtask.rinput.ExtractBriarMetadataInputs
 import kotlin.random.Random
 
-const val MANUAL_CHECKS = true
+const val MANUAL_CHECKS = false
 const val PRINT_EVERY = 1000
 
 fun extractAndFilterMetadata(rArg: ExtractBriarMetadataInputs) {
